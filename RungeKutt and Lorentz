@@ -1,0 +1,93 @@
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# function that returns dy/dt
+def model(y, t):
+    k = 0.3
+    dydt = -k * y
+    return dydt
+
+# initial condition
+y0 = 5
+
+# time points
+t = np.linspace(0,20)
+
+# solve ODE
+y = odeint(model,y0,t)
+
+# plot results
+plt.plot(t,y)
+plt.xlabel('time')
+plt.ylabel('y(t)')
+plt.show()
+
+# function that returns dz/dt
+def model(z,t,u):
+    x = z[0]
+    y = z[1]
+    dxdt = (-x + u)/2.0
+    dydt = (-y + x)/5.0
+    dzdt = [dxdt,dydt]
+    return dzdt
+    
+def rungeKutt(func, y0, x):
+    y=[]
+    y=np.append(y, y0)
+    h=x[1]-x[0]
+    for i in range(len(x)-1):
+        k1=func(x[i],y[i])
+        k2=func(x[i]+h/2,y[i]+h*k1/2)
+        k3=func(x[i]+h/2,y[i]+h*k2/2)
+        k4=func(x[i]+h,y[i]+h*k3)
+        y=np.append(y, y[i]+h*(k1+2*k2+2*k3+k4)/6)
+    return y
+    
+def model(t, y):
+    k = 0.3
+    dydt = -k * y
+    return dydt
+
+yn=rungeKutt(model, y0, t)
+plt.plot(t,yn)
+plt.xlabel('time')
+plt.ylabel('y(t)')
+plt.show()
+
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+(sigma, ro, beta) = (10, 28, 8/3)
+
+def model(yvect,t):
+    x=yvect[0]
+    y=yvect[1]
+    z=yvect[2]
+    dxdt=sigma*(y-x)
+    dydt =x*(ro-z)-y
+    dzdt=x*y-beta*z
+    vect=[dxdt, dydt, dzdt]
+    return vect
+
+# initial condition
+y0 = [10, 10, 10]
+
+# time points
+t = np.linspace(0,20, 1000)
+
+y = odeint(model,y0,t)
+
+from mpl_toolkits import mplot3d
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+fig = plt.figure()
+
+ax = plt.axes(projection='3d')
+#ax.scatter(x, y, z, c=z, cmap='viridis', linewidth=0.5);
+ax.scatter3D(y[:,0], y[:, 1], y[:, 2])
+
