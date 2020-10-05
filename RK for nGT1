@@ -1,0 +1,63 @@
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+# это все работает только для n>=2 !!!
+
+
+def addvect(a,b):
+    c=[]
+    if len(a)==len(b):
+        for j in range (len(a)):
+            c=np.append(c, a[j]+b[j])
+    else: print('a and b have different length')
+    
+    return c
+    
+def rungeKutt(func, y0, x):              #n=len(y0) - размерность системы
+    n=len(y0)
+    y=[y0 for t in x]
+    
+    h=x[1]-x[0]
+    for i in range(len(x)-1):
+        
+        k1=func(x[i],y[i])
+        
+        k2=func(x[i]+h/2,addvect(y[i], [x*h/2 for x in k1]))
+        
+        k3=func(x[i]+h/2,addvect(y[i],[x*h/2 for x in k2]))
+        
+        k4=func(x[i]+h,addvect(y[i],[x*h for x in k3]))
+        
+        kkk=addvect(addvect(k2, k3),addvect(addvect(k1, k2), addvect(k3, k4)))
+        
+        y[i+1]=addvect(y[i],[x*h/6 for x in kkk])
+        
+    return y
+    
+    def model2(t, z):
+    dxdt = 3.0 * np.exp(-t)
+    dydt = -z[1] + 3
+    dzdt = [dxdt,dydt]
+    return dzdt
+
+# initial condition
+z0 = [0,0]
+
+# time points
+t = np.linspace(0,5)
+
+yn=rungeKutt(model2, z0, t)
+
+yn0=[]
+for i in range(len(yn)):
+    yn0=np.append(yn0, yn[i][0])
+    
+plt.plot(t,yn0)
+
+yn1=[]
+for i in range(len(yn)):
+    yn1=np.append(yn1, yn[i][0])
+plt.plot(t,yn1)
+plt.xlabel('time')
+plt.ylabel('y(t)')
+plt.show()
