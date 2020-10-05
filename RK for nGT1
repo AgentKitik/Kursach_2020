@@ -34,7 +34,7 @@ def rungeKutt(func, y0, x):              #n=len(y0) - размерность с�
         
     return y
     
-    def model2(t, z):
+def model2(t, z):
     dxdt = 3.0 * np.exp(-t)
     dydt = -z[1] + 3
     dzdt = [dxdt,dydt]
